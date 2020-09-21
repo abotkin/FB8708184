@@ -23,21 +23,49 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="Jtv-k4-OYQ"/>
                                 </connections>
                             </mapView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G1w-NQ-ZsS">
-                                <rect key="frame" x="151" y="812" width="112" height="30"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="Cycle Pin Status"/>
-                                <connections>
-                                    <action selector="updatePinStatusImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mtE-PK-1Jv"/>
-                                </connections>
-                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZvQ-0w-qt8">
+                                <rect key="frame" x="118" y="777" width="178" height="75"/>
+                                <subviews>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="JJo-mt-lg3">
+                                        <rect key="frame" x="121" y="3" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="toggleUseWorkaround:" destination="BYZ-38-t0r" eventType="valueChanged" id="olF-cn-nT8"/>
+                                        </connections>
+                                    </switch>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Workaround" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NeT-k0-hVI">
+                                        <rect key="frame" x="8" y="8" width="93" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G1w-NQ-ZsS">
+                                        <rect key="frame" x="33" y="37" width="112" height="30"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Cycle Pin Status"/>
+                                        <connections>
+                                            <action selector="updatePinStatusImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mtE-PK-1Jv"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="NeT-k0-hVI" firstAttribute="leading" secondItem="ZvQ-0w-qt8" secondAttribute="leadingMargin" id="7iO-uC-78g"/>
+                                    <constraint firstItem="G1w-NQ-ZsS" firstAttribute="centerX" secondItem="ZvQ-0w-qt8" secondAttribute="centerX" id="RBM-ma-CmE"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="JJo-mt-lg3" secondAttribute="trailing" id="fJj-aV-v9Y"/>
+                                    <constraint firstItem="JJo-mt-lg3" firstAttribute="leading" secondItem="NeT-k0-hVI" secondAttribute="trailing" constant="20" id="gCf-9S-HR1"/>
+                                    <constraint firstItem="JJo-mt-lg3" firstAttribute="centerY" secondItem="NeT-k0-hVI" secondAttribute="centerY" id="jWN-FR-b8k"/>
+                                    <constraint firstItem="G1w-NQ-ZsS" firstAttribute="top" secondItem="NeT-k0-hVI" secondAttribute="bottom" constant="8" id="kIC-lr-QQA"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="G1w-NQ-ZsS" secondAttribute="bottom" id="oE8-7N-VML"/>
+                                    <constraint firstItem="NeT-k0-hVI" firstAttribute="top" secondItem="ZvQ-0w-qt8" secondAttribute="topMargin" id="z9k-mv-TQB"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="ZvQ-0w-qt8" secondAttribute="bottom" constant="10" id="6hH-cX-CWH"/>
                             <constraint firstItem="vYy-24-2Bo" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerXWithinMargins" id="AXa-TN-uNk"/>
-                            <constraint firstItem="G1w-NQ-ZsS" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="flI-z6-wjz"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="G1w-NQ-ZsS" secondAttribute="bottom" constant="20" id="gju-gR-yLc"/>
+                            <constraint firstItem="ZvQ-0w-qt8" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="cqB-1W-CT3"/>
                             <constraint firstItem="vYy-24-2Bo" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="jRe-aF-UTN"/>
                             <constraint firstItem="vYy-24-2Bo" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerYWithinMargins" id="nZX-4e-EBs"/>
                             <constraint firstItem="vYy-24-2Bo" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="ngZ-mv-oJ2"/>
@@ -45,6 +73,7 @@
                     </view>
                     <connections>
                         <outlet property="mapView" destination="vYy-24-2Bo" id="1F7-vn-Pwj"/>
+                        <outlet property="workaroundSwitch" destination="JJo-mt-lg3" id="sMw-HE-SU2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

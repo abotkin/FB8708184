@@ -28,6 +28,9 @@
 @interface ViewController ()
 
 @property (nonatomic, assign) BOOL pinsInUse;
+@property (nonatomic, assign) BOOL useWorkaround;
+
+@property (nonatomic, weak) IBOutlet UISwitch *workaroundSwitch;
 
 @end
 
@@ -49,6 +52,12 @@
     [annotations addObject:annotation];
 
     [self.mapView addAnnotations:annotations];
+
+    self.useWorkaround = self.workaroundSwitch.on;
+}
+
+- (IBAction)toggleUseWorkaround:(UISwitch *)sender {
+    self.useWorkaround = sender.on;
 }
 
 - (IBAction)updatePinStatusImage:(id)sender {
@@ -61,7 +70,45 @@
     for (id<MKAnnotation> annotation in self.mapView.annotations) {
         MKAnnotationView *annotationView = [self.mapView viewForAnnotation:annotation];
 
-        annotationView.image = newImage;
+        // Let's update that MKAnnotationView image
+        if (self.useWorkaround) {
+            // Feedback Assistant ticket: FB8708184
+            //
+            // With iOS 14, setting the MKAnnotationView's image leads to a glitched CABasicAnimation when using images of the same size
+            // from an asset catalog.
+            //
+            // To work around this, we create our own version of the system animation that isn't glitched, prevent
+            // the system from adding the glitched system provided one, & then add our animation once the image sets are done.
+            //
+            // For demo purposes, we have this code here in the VC. See "AXBAnnotationView.h" for an MKAnnotationView subclass version you can
+            // use to implement the workaround without cluttering your code.
+            if (@available(iOS 14, *)) {
+                CALayer *imageLayer = annotationView.layer.sublayers.firstObject;
+
+                CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"contents"];
+                animation.fromValue = imageLayer.contents;
+                animation.toValue = (__bridge id)newImage.CGImage;
+                animation.fillMode = kCAFillModeBackwards;
+                animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
+                animation.duration = 0.25;
+
+                // Now let's update the image but disable CAAnimations so the buggy iOS 14 contents animation doesn't occur
+                [CATransaction begin];
+                [CATransaction setValue:(id)kCFBooleanTrue
+                                 forKey:kCATransactionDisableActions];
+                annotationView.image = newImage;
+                [CATransaction commit];
+
+                // Add our version of the contents animation
+                [imageLayer addAnimation:animation forKey:@"contents"];
+            } else {
+                // iOS 13 and below don't have the glitched CABasicAnimation, so no workaround needed
+                annotationView.image = newImage;
+            }
+        } else {
+            // User in demo project has disabled the workaround to see iOS 14 GM behavior
+            annotationView.image = newImage;
+        }
     }
 }
 
